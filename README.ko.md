@@ -34,6 +34,14 @@ zig build -Doptimize=ReleaseFast
 ./zig-out/bin/chrysoberyl bench
 ```
 
+## 0.2.0 변경 사항
+
+- 포맷 v2: 이름 있는 다중 타입 스키마(`int32`, `int64`, `float64`), 열별 null 비트맵, CRC32 체크섬 (v1 파일 호환)
+- RLE 및 델타+ZigZag 코덱과 열별 자동 선택, SIMD 누적합 디코딩
+- 압축 상태 그대로 실행되는 SIMD 쿼리 엔진(비교, 범위, null 조건, AND/OR, 필터 집계)
+- `mmap` 기반 제로카피 파일 열기, 손상된 버퍼에 대한 검증 강화
+- CLI: `generate`, `inspect --verify`, `query`, `verify`, `bench` (`--json` 지원)
+
 ## 라이선스
 
 MIT License. Copyright (c) 2026 Jeong Hoon Kim.

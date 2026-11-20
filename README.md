@@ -34,6 +34,22 @@ zig build -Doptimize=ReleaseFast
 ./zig-out/bin/chrysoberyl bench
 ```
 
+## File Format, Codecs and Queries (0.2.0)
+
+```bash
+# Generate a sample table with automatic per-column codec selection and 5% nulls
+./zig-out/bin/chrysoberyl generate sales.chry --rows 1000000 --encoding auto --null-pct 5
+
+# Schema, codecs, null counts and column statistics, with checksum verification
+./zig-out/bin/chrysoberyl inspect sales.chry --verify
+
+# Vectorized filter and aggregate, evaluated directly on compressed columns
+./zig-out/bin/chrysoberyl query sales.chry --where 'category==3' --where 'quantity[10..20]' --agg quantity --json
+./zig-out/bin/chrysoberyl query sales.chry --where 'price:null' --where 'category<2' --or --limit 10
+```
+
+Format v2 stores a named schema, a validity bitmap per column, 64-byte aligned column payloads and a CRC32 checksum. Each column is stored as plain, run-length or delta plus ZigZag data. Files open through `mmap` without copying, and `TableView` validates every offset and enum before it exposes a column.
+
 ## License
 
 MIT License. Copyright (c) 2026 Jeong Hoon Kim.
